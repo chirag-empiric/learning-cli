@@ -1,31 +1,13 @@
-use clap::{Parser, Subcommand};
+use clap::Parser;
 
 #[derive(Parser)]
-#[command(version, about, long_about = "This is jani")]
-struct Cmd {
-    name: Option<String>,
-    #[command(subcommand)]
-    command: Option<Commands>,
+#[command(version, about, long_about = None)] // Read from `Cargo.toml`
+struct Cli {
+    #[arg(long)]
+    one: String,
 }
 
-#[derive(Subcommand, Debug)]
-enum Commands {
-    Test {
-        #[arg(short, long)]
-        list: bool,
-    },
-}
 fn main() {
-    let cmd = Cmd::parse();
-
-    if let Some(name) = cmd.name.as_deref() {
-        println!("Value for name: {name}");
-    }
-
-    match &cmd.command {
-        Some(command) => {
-            println!("SOme command: {:?}", command)
-        }
-        None => {}
-    }
+    let cli = Cli::parse();
+    println!("One: {:?}", cli.one);
 }
